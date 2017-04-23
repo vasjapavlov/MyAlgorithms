@@ -1,4 +1,14 @@
-/* Code generated && tested by LizardCode for CodeFu */
+/* Code generated && tested by LizardCode for CodeFu 
+
+The problem asks us to find the sum of all numbers from 1 to N that have a sum of digits of exactly K.
+1 <= N <= 10^100
+1 <= K <= 900
+
+As you can see, N is extremely large so any naive solution will time out.
+We can use dynamic programming to solve it.
+
+
+*/
 #include <limits.h>
 #include <vector>
 #include <sstream>
