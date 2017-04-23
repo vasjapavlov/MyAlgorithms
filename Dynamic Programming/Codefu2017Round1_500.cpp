@@ -1,5 +1,7 @@
 /* Code generated && tested by LizardCode for CodeFu 
 
+http://codefu.mk/codefu2017-round1.html?subpage=problem&problemid=2569
+
 The problem asks us to find the sum of all numbers from 1 to N that have a sum of digits of exactly K.
 1 <= N <= 10^100
 1 <= K <= 900
