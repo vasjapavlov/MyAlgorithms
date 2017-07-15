@@ -1,6 +1,7 @@
 /**
 HLD
 Problem : https://www.codechef.com/JULY17/problems/PSHTTR
+//HLD code taken and modified from: https://blog.anudeep2011.com/heavy-light-decomposition/
  */
  
 #include <iostream>
@@ -37,7 +38,6 @@ inline void update_tree(int cur, int s, int e, int &x, int  &val) {
     update_tree(c1, s, m, x, val);
     update_tree(c2, m, e, x, val);
     st[cur] = (st[c1] ^ st[c2]);
-//    st[cur] = st[c1] > st[c2] ? st[c1] : st[c2];
 }
  
 /*
@@ -48,7 +48,6 @@ inline void update_tree(int cur, int s, int e, int &x, int  &val) {
 inline int query_tree(int cur, int s, int e, int S, int E) {
     if(s >= E || e <= S) {
         return 0;
-//        qt[cur] = -1;
     }
     if(s >= S && e <= E) {
         return st[cur];
@@ -70,7 +69,6 @@ inline int query_up(int u, int v) {
     }
     if(u == v) return 0; // Trivial
     int uchain, vchain = chainInd[v];
-//    int ans = -1;
     int ans = 0;
     // uchain and vchain are chain numbers of u and v
     while(1) {
@@ -82,7 +80,6 @@ inline int query_up(int u, int v) {
             ans ^= query_tree(1, 0, ptr, posInBase[v]+1, posInBase[u]+1);
             
             // Above is call to segment tree query function
-//            if(qt[1] > ans) ans = qt[1]; // Update answer
             break;
         }
         ans ^= query_tree(1, 0, ptr, posInBase[chainHead[uchain]], posInBase[u]+1);
@@ -114,21 +111,14 @@ bool hasChanged = false;
 int lastU, lastV = -1, lastAns;
  
 inline void query(int u, int v, int qNum) {
-//    if(!hasChanged && u == lastU && v == lastV) {
-//        result[qNum] = lastAns;
-//        return;
-//    }
     /*
      * We have a query from u to v, we break it into two queries, u to LCA(u,v) and LCA(u,v) to v
      */
     int lca = LCA(u, v);
-//    int lca = 0;
     int ans = query_up(u, lca); // One part of path
     int temp = query_up(v, lca); // another part of path
-//    if(temp > ans) ans = temp; // take the maximum of both paths
     ans = (ans ^ temp);
     result[qNum] = ans;
-//    cout << ans << '\n';
 }
  
 /*
@@ -196,33 +186,6 @@ void dfs(int cur, int prev, int _depth=0) {
         }
 }
  
-//#define edgeType 0
-//#define queryType 1
-//
-//struct event {
-//    int u,v,c;
-//    int edgeNum;
-//    int qNum;
-//    
-//    int type;
-//    
-//    event(){}
-//    event(int _u, int _v, int _c, int _edgeNum) {
-//        u = _u;
-//        v = _v;
-//        c = _c;
-//        edgeNum = _edgeNum;
-//        type = edgeType;
-//    }
-//  
-//    event(int _u, int _v, int _c) {
-//        u = _u;
-//        v = _v;
-//        c = _c;
-//        type = queryType;
-//    }
-//};
- 
 struct edgeEvent {
     int u, v, c;
     int edgeNum;
@@ -248,8 +211,6 @@ struct queryEvent {
     }
 };
  
- 
- 
 bool operator <(const edgeEvent &a, const edgeEvent &b) {
     return a.c < b.c;
 }
@@ -263,8 +224,6 @@ queryEvent queries[N];
  
 int nEdges;
 int nQueries;
-//event events[200001];
-//int nEvents;
  
 #define getcx getchar_unlocked
 inline void inp( int &n )//fast input function
@@ -286,14 +245,11 @@ int main() {
     
     int t;
     int u,v,c,k;
-//    cin >> t;
     inp(t);
     while(t--) {
-//        nEvents = 0;
         nEdges = nQueries = 0;
         ptr = 0;
         int n;
-//        cin >> n;
         inp(n);
         root = rand()%n;
         // Cleaning step, new test case
@@ -306,15 +262,12 @@ int main() {
         memset(st, 0, sizeof(st));
         
         for(int i=1; i<n; i++) {
-            
-//            cin >> u >> v >> c;
             inp(u);
             inp(v);
             inp(c);
             u--; v--;
             
             edges[nEdges++] = edgeEvent(u, v, c, i-1);
-//            events[nEvents++] = event(u, v, c, i-1);
             adj[u].push_back(v);
             indexx[u].push_back(i-1);
             adj[v].push_back(u);
@@ -334,29 +287,20 @@ int main() {
                     pa[i][j] = pa[i-1][pa[i-1][j]];
         
         int m;
-//        cin >> m;
         inp(m);
         
         for(int i = 0; i < m; i++) {
-            
-//            cin >> u >> v >> k;
             inp(u);
             inp(v);
             inp(k);
             u--; v--;
             queries[nQueries++] = queryEvent(u, v, k, i);
-//            event e = event(u, v, k);
-//            e.qNum = i;
-//            events[nEvents++] = e;
-            
         }
         
         edges[nEdges] = edgeEvent(0, 0, 2000000000, 1000000000);
         queries[nQueries] = queryEvent(0, 0, 2000000000, 1000000000);
         sort(edges, edges + nEdges);
-        sort(queries, queries + nQueries);
-//        sort(events, events + nEvents);
- 
+        sort(queries, queries + nQueries); 
         int eIdx = 0;
         int qIdx = 0;
         
@@ -369,19 +313,6 @@ int main() {
                 qIdx++;
             }
         }
-        
-//        for(int i = 0; i < nEvents ; i++) {
-//            if(events[i].type == edgeType) {
-//                change(events[i].edgeNum, events[i].c);
-//              //  hasChanged = true;
-//            } else {
-//                query(events[i].u, events[i].v, events[i].qNum);
-//                hasChanged = false;
-//              //  lastU = events[i].u;
-//              //  lastV = events[i].v;
-//              //  lastAns = result[events[i].qNum];
-//            }
-//        }
         
         for(int i = 0; i < m; i++) {
             cout << result[i] << endl;
