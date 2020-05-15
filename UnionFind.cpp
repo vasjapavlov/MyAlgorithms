@@ -11,26 +11,26 @@
 using namespace std;
 
 class UnionFind {
-
-    private:
     
-    int parent[10000];
-    int weight[10000];
+private:
+    
+    int id[10000];
+    int sz[10000];
     int getRoot(int node) {
-        while(parent[node] != node) {
-            parent[node] = parent[ parent[node] ];
-            node = parent[node];
+        while(id[node] != node) {
+            id[node] = id[ id[node] ];
+            node = id[node];
         }
         return node;
     }
     
-    public:
+public:
     
     // initializer
     UnionFind(int N) {
         for(int i=0;i<N;i++) {
-            parent[i]=i;
-            weight[i]=1;
+            id[i]=i;
+            sz[i]=1;
         }
     }
     
@@ -42,13 +42,13 @@ class UnionFind {
         int root1=getRoot(nodeA);
         int root2=getRoot(nodeB);
         
-        if(weight[root1] < weight[root2]) {
-            parent[root1] = root2;
-            weight[root2] += weight[root1];
+        if(sz[root1] < sz[root2]) {
+            id[root1] = root2;
+            sz[root2] += sz[root1];
         }
         else {
-            parent[root2] = root1;
-            weight[root1] += weight[root2];
+            id[root2] = root1;
+            sz[root1] += sz[root2];
         }
     }
 };
