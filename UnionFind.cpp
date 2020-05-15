@@ -10,9 +10,9 @@
 
 using namespace std;
 
-class UnionFind
-{
-private:
+class UnionFind {
+
+    private:
     
     int parent[10000];
     int weight[10000];
@@ -24,7 +24,7 @@ private:
         return node;
     }
     
-public:
+    public:
     
     // initializer
     UnionFind(int N) {
